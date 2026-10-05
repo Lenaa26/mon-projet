@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Compteur temps écoulé indépendant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #1c1c1c;
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0,0,0,0.6);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .time {
+            font-size: 1.3em;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Temps écoulé depuis<br>26 février 2009 – 06h10</h1>
+
+    <div class="time" id="years"></div>
+    <div class="time" id="months"></div>
+    <div class="time" id="days"></div>
+    <div class="time" id="hours"></div>
+    <div class="time" id="minutes"></div>
+    <div class="time" id="seconds"></div>
+</div>
+
+<script>
+const startDate = new Date(2009, 1, 26, 6, 10, 0); // février = 1
+
+function updateCounter() {
+    const now = new Date();
+
+    const diffMs = now - startDate;
+
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours   = Math.floor(diffMs / (1000 * 60 * 60));
+    const days    = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    // Années calendaires écoulées
+    let years = now.getFullYear() - startDate.getFullYear();
+    const anniversaryThisYear = new Date(
+        now.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate(),
+        startDate.getHours(),
+        startDate.getMinutes()
+    );
+    if (now < anniversaryThisYear) years--;
+
+    // Mois calendaires écoulés
+    let months = (now.getFullYear() - startDate.getFullYear()) * 12;
+    months += now.getMonth() - startDate.getMonth();
+    const anniversaryThisMonth = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth() + months,
+        startDate.getDate(),
+        startDate.getHours(),
+        startDate.getMinutes()
+    );
+    if (now < anniversaryThisMonth) months--;
+
+    document.getElementById("years").textContent   = years   + " années écoulées";
+    document.getElementById("months").textContent  = months  + " mois écoulés";
+    document.getElementById("days").textContent    = days    + " jours écoulés";
+    document.getElementById("hours").textContent   = hours   + " heures écoulées";
+    document.getElementById("minutes").textContent = minutes + " minutes écoulées";
+    document.getElementById("seconds").textContent = seconds + " secondes écoulées";
+}
+
+updateCounter();
+setInterval(updateCounter, 1000);
+</script>
+
+</body>
+</html>
